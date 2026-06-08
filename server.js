@@ -14,6 +14,16 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+// --- 0. ROOT ROUTE (Fixes "Cannot GET /" Error) ---
+app.get('/', (req, res) => {
+  res.json({
+    status: "online",
+    business: "JoyTech Digital Services API Gateway",
+    owner: "Joyce William",
+    timestamp: new Date()
+  });
+});
+
 // --- MIDDLWARE GATEWAYS ---
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -128,7 +138,6 @@ app.post('/api/payments/mpesa-callback', async (req, res) => {
        const mpesaReceipt = metadata.find(item => item.Name === 'MpesaReceiptNumber').Value;
        const amount = metadata.find(item => item.Name === 'Amount').Value;
        
-       // In a real STK system, use CheckoutRequestID to pair transaction nodes
        await pool.query(
          "INSERT INTO payments (request_id, amount, mpesa_receipt_number, status, paid_at) VALUES ((SELECT max(request_id) FROM service_requests), $1, $2, 'Paid', CURRENT_TIMESTAMP)",
          [amount, mpesaReceipt]
