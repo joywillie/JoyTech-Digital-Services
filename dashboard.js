@@ -1,14 +1,17 @@
-function Dashboard(){
+import {useNavigate} from "react-router-dom";
 
+
+function Dashboard(){
 
 const user =
 JSON.parse(localStorage.getItem("user"));
+
+const navigate=useNavigate();
 
 
 return(
 
 <div>
-
 
 <h1>
 Welcome {user?.name}
@@ -16,39 +19,23 @@ Welcome {user?.name}
 
 
 <h2>
-Available Services
+JoyTech Digital Services
 </h2>
 
 
-<div>
+<button
+onClick={()=>navigate("/services")}
+>
 
-<h3>KRA Services</h3>
-<p>
-PIN, Returns assistance
-</p>
+View Services
 
-
-<h3>IT Services</h3>
-<p>
-Website, software, networking
-</p>
-
-
-<h3>Documents</h3>
-<p>
-CV writing and typing
-</p>
+</button>
 
 
 </div>
-
-
-</div>
-
 
 )
 
 }
-
 
 export default Dashboard;
